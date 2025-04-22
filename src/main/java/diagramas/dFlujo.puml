@@ -1,0 +1,24 @@
+@startuml
+start
+:Mostrar ventana de login;
+:Usuario ingresa credenciales;
+if (Credenciales válidas?) then (sí)
+  :Mostrar menú de selección de pizzas;
+  :Usuario añade pizzas al carrito;
+  :Usuario hace clic en "Checkout";
+  :Solicitar datos de pago;
+  if (Pago autorizado?) then (sí)
+    :OrderManager.crearPedido();
+    :DatabaseManager.insert(pedido);
+    :PaymentProcessor.procesarPago();
+    :Mostrar confirmación de pedido;
+    stop
+  else (no)
+    :Mostrar error de pago;
+    stop
+  endif
+else (no)
+  :Mostrar error de autenticación;
+  stop
+endif
+@enduml

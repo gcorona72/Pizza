@@ -1,0 +1,73 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class DataBaseManager {
+  - url: String
+  - user: String
+  - pass: String
+  + connect(): Connection
+  + create(obj): void
+  + read(id): Object
+  + update(obj): void
+  + delete(id): void
+}
+
+class Authenticator {
+  - db: DataBaseManager
+  + Authenticator(db: DataBaseManager)
+  + login(username: String, password: String): boolean
+}
+
+class OrderManager {
+  - db: DataBaseManager
+  + OrderManager(db: DataBaseManager)
+  + crearPedido(o: Order): void
+  + actualizarPedido(o: Order): void
+  + eliminarPedido(id: int): void
+}
+
+class PaymentProcessor {
+  - db: DataBaseManager
+  + PaymentProcessor(db: DataBaseManager)
+  + procesarPago(p: Payment): boolean
+}
+
+class PizzaOrderApp {
+  - auth: Authenticator
+  - orderMgr: OrderManager
+  - payProc: PaymentProcessor
+  + PizzaOrderApp(auth: Authenticator, orderMgr: OrderManager, payProc: PaymentProcessor)
+  + initUI(): void
+}
+
+class Order {
+  - id: int
+  - items: List<Pizza>
+  - total: double
+  + calcularTotal(): double
+}
+
+class Pizza {
+  - id: int
+  - nombre: String
+  - precio: double
+}
+
+class Payment {
+  - orderId: int
+  - amount: double
+  - method: String
+}
+
+' Relaciones
+DataBaseManager <-- Authenticator
+DataBaseManager <-- OrderManager
+DataBaseManager <-- PaymentProcessor
+Authenticator <-- PizzaOrderApp
+OrderManager <-- PizzaOrderApp
+PaymentProcessor <-- PizzaOrderApp
+PizzaOrderApp --> Order
+PizzaOrderApp --> Pizza
+PizzaOrderApp --> Payment
+
+@enduml
