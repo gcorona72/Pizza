@@ -1,73 +1,51 @@
 @startuml
-skinparam classAttributeIconSize 0
+|UI|
+start
+:LoginWindow.mostrar();
+:LoginWindow.recogerCredenciales();
+->
 
-class DataBaseManager {
-  - url: String
-  - user: String
-  - pass: String
-  + connect(): Connection
-  + create(obj): void
-  + read(id): Object
-  + update(obj): void
-  + delete(id): void
-}
+|Authenticator|
+:Authenticator.login(user, pass);
+if (login OK?) then (sí)
+  ->
 
-class Authenticator {
-  - db: DataBaseManager
-  + Authenticator(db: DataBaseManager)
-  + login(username: String, password: String): boolean
-}
+  |UI|
+  :MainWindow.mostrarMenú();
+  :MainWindow.seleccionarPizzas();
+  :MainWindow.clickCheckout();
+  :MainWindow.recogerDatosPago();
+  ->
 
-class OrderManager {
-  - db: DataBaseManager
-  + OrderManager(db: DataBaseManager)
-  + crearPedido(o: Order): void
-  + actualizarPedido(o: Order): void
-  + eliminarPedido(id: int): void
-}
+  |PaymentProcessor|
+  :PaymentProcessor.procesar(datosPago);
+  if (pago OK?) then (sí)
+    ->
 
-class PaymentProcessor {
-  - db: DataBaseManager
-  + PaymentProcessor(db: DataBaseManager)
-  + procesarPago(p: Payment): boolean
-}
+    |OrderManager|
+    :OrderManager.crear(order);
+    ->
 
-class PizzaOrderApp {
-  - auth: Authenticator
-  - orderMgr: OrderManager
-  - payProc: PaymentProcessor
-  + PizzaOrderApp(auth: Authenticator, orderMgr: OrderManager, payProc: PaymentProcessor)
-  + initUI(): void
-}
+    |DataBaseManager|
+    :insert(order);
+    return
+    ->
 
-class Order {
-  - id: int
-  - items: List<Pizza>
-  - total: double
-  + calcularTotal(): double
-}
+    |UI|
+    :Mostrar confirmación;
+    stop
+  else (no)
+    ->
 
-class Pizza {
-  - id: int
-  - nombre: String
-  - precio: double
-}
+    |UI|
+    :Mostrar error de pago;
+    stop
+  endif
+else (no)
+  ->
 
-class Payment {
-  - orderId: int
-  - amount: double
-  - method: String
-}
-
-' Relaciones
-DataBaseManager <-- Authenticator
-DataBaseManager <-- OrderManager
-DataBaseManager <-- PaymentProcessor
-Authenticator <-- PizzaOrderApp
-OrderManager <-- PizzaOrderApp
-PaymentProcessor <-- PizzaOrderApp
-PizzaOrderApp --> Order
-PizzaOrderApp --> Pizza
-PizzaOrderApp --> Payment
-
+  |UI|
+  :Mostrar error de login;
+  stop
+endif
 @enduml
