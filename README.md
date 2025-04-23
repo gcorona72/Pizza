@@ -19,10 +19,6 @@ Pizza App es una aplicación Spring Boot diseñada para gestionar pedidos de piz
 ### Supabase
 La aplicación utiliza Supabase como base de datos. Las credenciales están configuradas en `application.properties`:
 
-```properties
-supabase.url=https://hpragblnjljgfulmzfka.supabase.co
-supabase.key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-```
 
 ### Puerto del servidor
 La aplicación se ejecuta en el puerto 8080 con el contexto `/pizzaapp`.
