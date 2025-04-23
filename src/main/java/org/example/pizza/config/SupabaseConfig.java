@@ -28,8 +28,9 @@ public class SupabaseConfig {
         String key = supabaseKey;
 
         if (url == null || url.isEmpty() || url.startsWith("${")) {
-            url = env.getProperty("SUPABASE_URL");
-            key = env.getProperty("SUPABASE_KEY");
+            // Asigna directamente los valores por defecto en lugar de usar env.getProperty
+            url = "https://hpragblnjljgfulmzfka.supabase.co";
+            key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwcmFnYmxuamxqZ2Z1bG16ZmthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU0MTg5NjYsImV4cCI6MjA2MDk5NDk2Nn0.xyIL2vl50yz36jBIJzvtNbyTkt4cgiCK7tq-BlJt_Y8";
         }
 
         if (url == null || key == null) {
